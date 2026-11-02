@@ -38,12 +38,13 @@ class BuilderTests(unittest.TestCase):
         payload=html.split('<script type="application/json" id="tutorial-data">')[1].split('</script>')[0]
         self.assertEqual(json.loads(payload)['title'],self.data['title'])
     def test_template_markers_in_content_are_preserved(self):
-        self.data['title'] = 'First line\nSecond line'
+        self.data['title'] = 'First line\nSecond line /*TUTORIAL_DATA*/'
         self.data['steps'][0]['body'] = 'TUTORIAL_PAGE_TITLE /*TUTORIAL_DATA*/'
         result = self.run_build()
         self.assertEqual(result.returncode,0,result.stderr)
         content=(self.root/'out/index.html').read_text().split('<script type="application/json" id="tutorial-data">')[1].split('</script>')[0]
         self.assertEqual(json.loads(content)['steps'][0]['body'], self.data['steps'][0]['body'])
+        self.assertIn('First line\nSecond line /*TUTORIAL_DATA*/</title>', (self.root/'out/index.html').read_text().replace(' · Replay Guide',''))
     def test_rejects_bad_timing_and_incomplete_steps(self):
         for field,value in [('start',-1),('end',11),('start',float('nan')),('end',0),('image','missing.png'),('status','verified-by-magic')]:
             with self.subTest(field=field,value=value):

@@ -156,7 +156,7 @@ def build(args):
     template = (Path(__file__).resolve().parents[1]/'assets/tutorial.html').read_text(encoding='utf-8')
     # Escape all HTML-significant characters in script data; UI inserts textContent only.
     payload = json.dumps(data,ensure_ascii=True).replace('<','\\u003c').replace('>','\\u003e').replace('&','\\u0026')
-    output = template.replace('TUTORIAL_PAGE_TITLE',html.escape(data['title'])).replace('/*TUTORIAL_DATA*/',payload)
+    output = template.replace('TUTORIAL_PAGE_TITLE',html.escape(data['title'])).replace('<script type="application/json" id="tutorial-data">/*TUTORIAL_DATA*/</script>', '<script type="application/json" id="tutorial-data">' + payload + '</script>')
     out = new_output(args.out)
     (out/'index.html').write_text(output,encoding='utf-8')
     if video: shutil.copyfile(video,out/'recording.mp4')
