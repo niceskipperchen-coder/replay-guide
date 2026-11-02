@@ -72,12 +72,18 @@ class MediaTests(unittest.TestCase):
         if not shutil.which('ffmpeg') or not shutil.which('ffprobe'): self.skipTest('FFmpeg unavailable')
         with tempfile.TemporaryDirectory() as folder:
             root=pathlib.Path(folder); source=root/'source.mp4'
-            subprocess.run(['ffmpeg','-v','error','-f','lavfi','-i','testsrc2=size=320x240:rate=10','-t','2','-c:v','libx264','-pix_fmt','yuv420p',str(source)],check=True)
-            result=subprocess.run(['python3',str(SCRIPT),'prepare',str(source),'--out',str(root/'frames'),'--at','0,1'],capture_output=True,text=True)
+            subprocess.run(['ffmpeg','-v','error','-f','lavfi','-i','testsrc2=size=320x240:rate=10','-f','lavfi','-i','sine=frequency=440:sample_rate=16000','-t','2','-c:v','libx264','-pix_fmt','yuv420p','-c:a','aac',str(source)],check=True)
+            result=subprocess.run(['python3',str(SCRIPT),'prepare',str(source),'--out',str(root/'frames'),'--at','0,1','--audio'],capture_output=True,text=True)
             self.assertEqual(result.returncode,0,result.stderr)
             manifest=json.loads((root/'frames/manifest.json').read_text())
             self.assertEqual([x['time'] for x in manifest['frames']],[0,1])
             self.assertEqual(len(list((root/'frames').glob('*.jpg'))),2)
+            self.assertEqual(manifest['audio'],'audio.wav')
+            self.assertTrue((root/'frames/audio.wav').stat().st_size > 1000)
+            for at in ['-1','nan','2']:
+                bad=subprocess.run(['python3',str(SCRIPT),'prepare',str(source),'--out',str(root/'bad'),'--at='+at],capture_output=True,text=True)
+                self.assertNotEqual(bad.returncode,0)
+                self.assertFalse((root/'bad').exists())
             data={'title':'Demo','summary':'Demo','duration':2,'steps':[{'title':'View','body':'See test pattern.','start':0,'end':1,'image':manifest['frames'][0]['file'],'alt':'Test pattern','status':'observed'}]}
             path=root/'frames/tutorial.json';path.write_text(json.dumps(data))
             result=subprocess.run(['python3',str(SCRIPT),'build',str(path),'--out',str(root/'site'),'--video',str(source)],capture_output=True,text=True)

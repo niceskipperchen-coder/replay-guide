@@ -24,9 +24,11 @@
 - [x] 2. Implement scripts/replay_guide.py with prepare and build subcommands. prepare emits timestamped frames/manifest; build consumes references/tutorial-format.md JSON, embeds images and optionally copies a supplied MP4. Run GREEN.
 - [x] 3. Implement assets/tutorial.html: responsive reader, index, progress, screenshot zoom, code copy, bounded replay. Verify in real Chrome at phone/desktop widths.
 - [x] 4. Write SKILL.md, schema reference, README, MIT license, contribution guide and synthetic/real evidence examples. Validate skill metadata; forward-test skill on a recording with an independent reviewer.
-- [ ] 5. Review, run all checks, create a portable example and ZIP, commit locally. Public repository creation/push can follow the user's existing open-source request once reviewed, if authentication permits.
+- [x] 5. Review, run all checks, create a portable example and ZIP, commit locally. Public repository creation/push can follow the user's existing open-source request once reviewed, if authentication permits.
 
 ## Execution record
 User approved the concrete workflow in chat and instructed building it. New project has its own directory/repository; no existing project branch is changed. Implement inline. Do not claim automatic interpretation, broad agent compatibility, or phone testing on physical devices.
 
 Review fixes: preserve literal template markers in source content; use intrinsic image height for highlight alignment; invalidate pending replay requests on navigation. Full unittest suite: 8 passing. Skill validator run separately. Browser checks/limits recorded in docs/validation.md.
+
+Published repository and GitHub Pages example. Independent forward test and review completed; no remaining blockers. Optional audio extraction verified with a generated sine-wave recording; malformed prepare timestamps rejected before writing.
