@@ -1,0 +1,31 @@
+{
+  "duration": 16.033333,
+  "frames": [
+    {
+      "time": 0.0,
+      "file": "frame-01-0.000s.jpg"
+    },
+    {
+      "time": 3.0,
+      "file": "frame-02-3.000s.jpg"
+    },
+    {
+      "time": 6.0,
+      "file": "frame-03-6.000s.jpg"
+    },
+    {
+      "time": 9.0,
+      "file": "frame-04-9.000s.jpg"
+    },
+    {
+      "time": 12.0,
+      "file": "frame-05-12.000s.jpg"
+    },
+    {
+      "time": 15.0,
+      "file": "frame-06-15.000s.jpg"
+    }
+  ],
+  "audio": null,
+  "note": "Sampled frames are evidence, not automatic action detection. No transcription was performed."
+}
